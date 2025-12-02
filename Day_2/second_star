@@ -1,0 +1,51 @@
+import numpy as np
+from tools import get_input_list
+
+test = False
+text = get_input_list(test)
+
+
+def split(s: str, k: int):
+    n = len(s)//k
+    return [s[i * n: (i + 1) * n] for i in range(k)]
+
+
+def get_divisors(n: int):
+    res = []
+    for i in range(2, n+1):
+        if n % i == 0:
+            res.append(i)
+    return res
+
+
+def is_valid_second_star(s: str):
+    n = len(s)
+    if n == 0:
+        return False
+
+    divisors = get_divisors(len(s))
+    for div in divisors:
+        sub_part = split(s, div)
+        if len(set(sub_part)) == 1:
+            return False
+    return True
+
+
+def get_false_id_range(min_range, max_range):
+    res = []
+    for k in range(min_range, max_range + 1):
+        if not is_valid_second_star(str(k)):
+            res.append(int(k))
+    return res
+
+
+def main():
+    res = []
+    for s in text:
+        min_range, max_range = s.split("-")[0], s.split("-")[1]
+        res.extend(get_false_id_range(int(min_range), int(max_range)))
+    print(res)
+    print(np.sum(res))
+
+
+main()
